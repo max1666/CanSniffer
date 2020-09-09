@@ -108,10 +108,9 @@ static uint8_t USBD_CDC_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum);
 static uint8_t USBD_CDC_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum);
 static uint8_t USBD_CDC_EP0_RxReady(USBD_HandleTypeDef *pdev);
 
-static uint8_t *USBD_CDC_GetFSCfgDesc(uint16_t *length);
-static uint8_t *USBD_CDC_GetHSCfgDesc(uint16_t *length);
-static uint8_t *USBD_CDC_GetOtherSpeedCfgDesc(uint16_t *length);
-static uint8_t *USBD_CDC_GetOtherSpeedCfgDesc(uint16_t *length);
+uint8_t *USBD_CDC_GetFSCfgDesc(uint16_t *length);
+uint8_t *USBD_CDC_GetHSCfgDesc(uint16_t *length);
+uint8_t *USBD_CDC_GetOtherSpeedCfgDesc(uint16_t *length);
 uint8_t *USBD_CDC_GetDeviceQualifierDescriptor(uint16_t *length);
 
 /* USB Standard Device Descriptor */
@@ -139,7 +138,7 @@ __ALIGN_BEGIN static uint8_t USBD_CDC_DeviceQualifierDesc[USB_LEN_DEV_QUALIFIER_
 
 
 /* CDC interface class callbacks structure */
-USBD_ClassTypeDef  USBD_CDC =
+USBD_CompClassTypeDef USBD_CDC =
 {
   USBD_CDC_Init,
   USBD_CDC_DeInit,
@@ -149,12 +148,6 @@ USBD_ClassTypeDef  USBD_CDC =
   USBD_CDC_DataIn,
   USBD_CDC_DataOut,
   NULL,
-  NULL,
-  NULL,
-  USBD_CDC_GetHSCfgDesc,
-  USBD_CDC_GetFSCfgDesc,
-  USBD_CDC_GetOtherSpeedCfgDesc,
-  USBD_CDC_GetDeviceQualifierDescriptor,
 };
 
 /* bespoke struct for this device; struct members are added and removed as needed */
@@ -164,11 +157,11 @@ struct configuration_1
   struct cdc_interface cdc[NUM_OF_CDC_UARTS];
 };
 
-/* USB CDC device HS Configuration Descriptor */
+/* fully initialize the bespoke struct as a const */
 __ALIGN_BEGIN static const struct configuration_1 USBD_Composite_CfgHSDesc __ALIGN_END =
 {
   {
-    /* Configuration Descriptor */
+    /*Configuration Descriptor*/
     sizeof(struct configuration_descriptor),         /* bLength */
     USB_DESC_TYPE_CONFIGURATION,                     /* bDescriptorType */
     USB_UINT16(sizeof(USBD_Composite_CfgHSDesc)),    /* wTotalLength */
@@ -176,7 +169,7 @@ __ALIGN_BEGIN static const struct configuration_1 USBD_Composite_CfgHSDesc __ALI
     0x01,                                            /* bConfigurationValue */
     0x00,                                            /* iConfiguration */
     0x80,                                            /* bmAttributes */
-    0x32,                                            /* MaxPower 0 mA */
+    50,                                              /* MaxPower */
   },
 
   {
@@ -199,12 +192,11 @@ __ALIGN_BEGIN static const struct configuration_1 USBD_Composite_CfgHSDesc __ALI
   },
 };
 
-
-/* USB CDC device FS Configuration Descriptor */
+/* fully initialize the bespoke struct as a const */
 __ALIGN_BEGIN static const struct configuration_1 USBD_Composite_CfgFSDesc __ALIGN_END =
 {
   {
-    /* Configuration Descriptor */
+    /*Configuration Descriptor*/
     sizeof(struct configuration_descriptor),         /* bLength */
     USB_DESC_TYPE_CONFIGURATION,                     /* bDescriptorType */
     USB_UINT16(sizeof(USBD_Composite_CfgFSDesc)),    /* wTotalLength */
@@ -212,34 +204,34 @@ __ALIGN_BEGIN static const struct configuration_1 USBD_Composite_CfgFSDesc __ALI
     0x01,                                            /* bConfigurationValue */
     0x00,                                            /* iConfiguration */
     0x80,                                            /* bmAttributes */
-    0x32,                                            /* MaxPower 0 mA */
+    50,                                              /* MaxPower */
   },
 
   {
 #if (NUM_OF_CDC_UARTS > 0)
     /* CDC1 */
-    CDC_HS_DESCRIPTOR(CDC_ITF_CMD_1, CDC_ITF_DATA_1, CDC_EP_CMD_1, CDC_EP_DATA_OUT_1, CDC_EP_DATA_IN_1)
+    CDC_FS_DESCRIPTOR(CDC_ITF_CMD_1, CDC_ITF_DATA_1, CDC_EP_CMD_1, CDC_EP_DATA_OUT_1, CDC_EP_DATA_IN_1)
 #endif
 #if (NUM_OF_CDC_UARTS > 1)
     /* CDC2 */
-    CDC_HS_DESCRIPTOR(CDC_ITF_CMD_2, CDC_ITF_DATA_2, CDC_EP_CMD_2, CDC_EP_DATA_OUT_2, CDC_EP_DATA_IN_2)
+    CDC_FS_DESCRIPTOR(CDC_ITF_CMD_2, CDC_ITF_DATA_2, CDC_EP_CMD_2, CDC_EP_DATA_OUT_2, CDC_EP_DATA_IN_2)
 #endif
 #if (NUM_OF_CDC_UARTS > 2)
     /* CDC3 */
-    CDC_HS_DESCRIPTOR(CDC_ITF_CMD_3, CDC_ITF_DATA_3, CDC_EP_CMD_3, CDC_EP_DATA_OUT_3, CDC_EP_DATA_IN_3)
+    CDC_FS_DESCRIPTOR(CDC_ITF_CMD_3, CDC_ITF_DATA_3, CDC_EP_CMD_3, CDC_EP_DATA_OUT_3, CDC_EP_DATA_IN_3)
 #endif
 #if (NUM_OF_CDC_UARTS > 3)
     /* CDC4 */
-    CDC_HS_DESCRIPTOR(CDC_ITF_CMD_4, CDC_ITF_DATA_4, CDC_EP_CMD_4, CDC_EP_DATA_OUT_4, CDC_EP_DATA_IN_4)
+    CDC_FS_DESCRIPTOR(CDC_ITF_CMD_4, CDC_ITF_DATA_4, CDC_EP_CMD_4, CDC_EP_DATA_OUT_4, CDC_EP_DATA_IN_4)
 #endif
   },
 };
 
-/* USB CDC device FS Configuration Descriptor */
+/* fully initialize the bespoke struct as a const */
 __ALIGN_BEGIN static const struct configuration_1 USBD_Composite_CfgOtherDesc __ALIGN_END =
 {
   {
-    /* Configuration Descriptor */
+    /*Configuration Descriptor*/
     sizeof(struct configuration_descriptor),         /* bLength */
     USB_DESC_TYPE_CONFIGURATION,                     /* bDescriptorType */
     USB_UINT16(sizeof(USBD_Composite_CfgOtherDesc)), /* wTotalLength */
@@ -247,7 +239,7 @@ __ALIGN_BEGIN static const struct configuration_1 USBD_Composite_CfgOtherDesc __
     0x01,                                            /* bConfigurationValue */
     0x00,                                            /* iConfiguration */
     0x80,                                            /* bmAttributes */
-    0x32,                                            /* MaxPower 0 mA */
+    50,                                              /* MaxPower */
   },
 
   {
@@ -269,6 +261,21 @@ __ALIGN_BEGIN static const struct configuration_1 USBD_Composite_CfgOtherDesc __
 #endif
   },
 };
+
+/* pointer and length of configuration descriptor for main USB driver */
+uint8_t *USBD_CfgHSDesc_pnt = (uint8_t *)&USBD_Composite_CfgHSDesc;
+uint16_t USBD_CfgHSDesc_len = sizeof(USBD_Composite_CfgHSDesc);
+
+uint8_t *USBD_CfgFSDesc_pnt = (uint8_t *)&USBD_Composite_CfgFSDesc;
+uint16_t USBD_CfgFSDesc_len = sizeof(USBD_Composite_CfgFSDesc);
+
+/**
+  * @}
+  */
+
+/** @defgroup USBD_CDC_Private_Functions
+  * @{
+  */
 
 /* endpoint numbers and "instance" (base register address) for each UART */
 static const USBD_CDC_ParamsTypeDef USBD_CfgParams[NUM_OF_CDC_UARTS] = 
@@ -698,7 +705,7 @@ static uint8_t USBD_CDC_EP0_RxReady(USBD_HandleTypeDef *pdev)
   * @param  length : pointer data length
   * @retval pointer to descriptor buffer
   */
-static uint8_t *USBD_CDC_GetFSCfgDesc(uint16_t *length)
+uint8_t *USBD_CDC_GetFSCfgDesc(uint16_t *length)
 {
   *length = (uint16_t)sizeof(USBD_Composite_CfgFSDesc);
 
@@ -712,7 +719,7 @@ static uint8_t *USBD_CDC_GetFSCfgDesc(uint16_t *length)
   * @param  length : pointer data length
   * @retval pointer to descriptor buffer
   */
-static uint8_t *USBD_CDC_GetHSCfgDesc(uint16_t *length)
+uint8_t *USBD_CDC_GetHSCfgDesc(uint16_t *length)
 {
   *length = (uint16_t)sizeof(USBD_Composite_CfgHSDesc);
 
@@ -726,7 +733,7 @@ static uint8_t *USBD_CDC_GetHSCfgDesc(uint16_t *length)
   * @param  length : pointer data length
   * @retval pointer to descriptor buffer
   */
-static uint8_t *USBD_CDC_GetOtherSpeedCfgDesc(uint16_t *length)
+uint8_t *USBD_CDC_GetOtherSpeedCfgDesc(uint16_t *length)
 {
   *length = (uint16_t)sizeof(USBD_Composite_CfgOtherDesc);
 

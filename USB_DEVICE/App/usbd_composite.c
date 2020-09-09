@@ -24,7 +24,7 @@
 
 #include "usbd_composite.h"
 #include "usbd_desc.h"
-#include "usbd_cdc.h" /* for USBD_CfgFSDesc_len and USBD_CfgFSDesc_pnt */
+#include "usbd_cdc.h" /* for USBD_CfgHSDesc and USBD_CfgFSDesc */
 
 /* USB handle declared in main.c */
 extern USBD_HandleTypeDef USBD_Device;
@@ -38,23 +38,27 @@ static uint8_t USBD_Composite_DataIn (USBD_HandleTypeDef *pdev, uint8_t epnum);
 static uint8_t USBD_Composite_DataOut (USBD_HandleTypeDef *pdev, uint8_t epnum);
 static uint8_t USBD_Composite_EP0_TxSent (USBD_HandleTypeDef *pdev);
 static uint8_t USBD_Composite_EP0_RxReady (USBD_HandleTypeDef *pdev);
+static uint8_t *USBD_Composite_GetHSCfgDesc (uint16_t *length);
 static uint8_t *USBD_Composite_GetFSCfgDesc (uint16_t *length);
+static uint8_t *USBD_Composite_GetOtherSpeedCfgDesc (uint16_t *length);
 static uint8_t USBD_Composite_SOF (struct _USBD_HandleTypeDef *pdev);
 
 /* interface class callbacks structure that is used by main.c */
 USBD_ClassTypeDef USBD_Composite = 
 {
-  .Init                  = USBD_Composite_Init,
-  .DeInit                = USBD_Composite_DeInit,
-  .Setup                 = USBD_Composite_Setup,
-  .EP0_TxSent            = USBD_Composite_EP0_TxSent,
-  .EP0_RxReady           = USBD_Composite_EP0_RxReady,
-  .DataIn                = USBD_Composite_DataIn,
-  .DataOut               = USBD_Composite_DataOut,
-  .SOF                   = USBD_Composite_SOF,
-  .IsoINIncomplete       = NULL,
-  .IsoOUTIncomplete      = NULL,     
-  .GetFSConfigDescriptor = USBD_Composite_GetFSCfgDesc,    
+  .Init                              = USBD_Composite_Init,
+  .DeInit                            = USBD_Composite_DeInit,
+  .Setup                             = USBD_Composite_Setup,
+  .EP0_TxSent                        = USBD_Composite_EP0_TxSent,
+  .EP0_RxReady                       = USBD_Composite_EP0_RxReady,
+  .DataIn                            = USBD_Composite_DataIn,
+  .DataOut                           = USBD_Composite_DataOut,
+  .SOF                               = USBD_Composite_SOF,
+  .IsoINIncomplete                   = NULL,
+  .IsoOUTIncomplete                  = NULL,
+  .GetHSConfigDescriptor             = USBD_Composite_GetHSCfgDesc,
+  .GetFSConfigDescriptor             = USBD_Composite_GetFSCfgDesc,
+  .GetOtherSpeedConfigDescriptor     = USBD_Composite_GetOtherSpeedCfgDesc,
 };
 
 struct composite_list_struct
@@ -177,10 +181,19 @@ static uint8_t USBD_Composite_EP0_RxReady (USBD_HandleTypeDef *pdev)
   return USBD_OK;
 }
 
+static uint8_t *USBD_Composite_GetHSCfgDesc (uint16_t *length)
+{
+  return USBD_CDC_GetHSCfgDesc(length);
+}
+
 static uint8_t *USBD_Composite_GetFSCfgDesc (uint16_t *length)
 {
-  *length = USBD_CfgFSDesc_len;
-  return USBD_CfgFSDesc_pnt;
+  return USBD_CDC_GetFSCfgDesc(length);
+}
+
+static uint8_t *USBD_Composite_GetOtherSpeedCfgDesc (uint16_t *length)
+{
+  return USBD_CDC_GetOtherSpeedCfgDesc(length);
 }
 
 /*

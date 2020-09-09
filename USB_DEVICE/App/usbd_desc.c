@@ -72,7 +72,7 @@
 //#define USBD_PID                           22336
 
 #define USBD_LANGID_STRING                 1033
-#define USBD_MANUFACTURER_STRING           "STMicroelectronics"
+#define USBD_MANUFACTURER_STRING           "Lab"
 #define USBD_PRODUCT_STRING                "CanSniffer Interface"
 #define USBD_CONFIGURATION_STRING          "CDC Config"
 #define USBD_INTERFACE_STRING              "CDC Interface"
@@ -83,6 +83,7 @@
 #define USBD_PRODUCT_STRING_IF1           "CanSniffer Interface 1"
 #define USBD_PRODUCT_STRING_IF2           "CanSniffer Interface 2"
 #define USBD_PRODUCT_STRING_IF3           "CanSniffer Interface 3"
+#define USBD_PRODUCT_STRING_IF4           "CanSniffer Interface 4"
 /* USER CODE END PRIVATE_DEFINES */
 
 /**
@@ -313,6 +314,7 @@ uint8_t * USBD_Dev_ProductStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *lengt
 		
 		switch (interfaceNumber)
 		{
+#if (NUM_OF_CDC_UARTS > 0)
 			case 0:
 			{
 				USBD_GetString((uint8_t *)USBD_PRODUCT_STRING_IF1, USBD_StrDesc, &descLength);
@@ -335,7 +337,9 @@ uint8_t * USBD_Dev_ProductStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *lengt
 				}
 			}
 			break;
-			
+#endif
+      
+#if (NUM_OF_CDC_UARTS > 1)
 			case 1:
 			{
 				USBD_GetString((uint8_t *)USBD_PRODUCT_STRING_IF2, USBD_StrDesc, &descLength);
@@ -358,7 +362,9 @@ uint8_t * USBD_Dev_ProductStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *lengt
 				}
 			}
 			break;
-			
+#endif
+
+#if (NUM_OF_CDC_UARTS > 2)
 			case 2:
 			{
 				USBD_GetString((uint8_t *)USBD_PRODUCT_STRING_IF3, USBD_StrDesc, &descLength);
@@ -381,7 +387,33 @@ uint8_t * USBD_Dev_ProductStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *lengt
 				}
 			}
 			break;
-      
+#endif
+
+#if (NUM_OF_CDC_UARTS > 3)
+			case 2:
+			{
+				USBD_GetString((uint8_t *)USBD_PRODUCT_STRING_IF4, USBD_StrDesc, &descLength);
+				
+				if(wLength == 0x0004)
+				{
+					*length = descLength;
+				}
+				else if(wLength == descLength)
+				{
+					*length = descLength;
+					
+					descLength = 0;
+					interfaceNumber++;
+					
+					if(interfaceNumber == NUM_OF_CDC_UARTS)
+					{
+						interfaceNumber = 0;
+					}
+				}
+			}
+			break;
+#endif
+
       default:
       {
         interfaceNumber = 0;

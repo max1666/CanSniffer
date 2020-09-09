@@ -64,17 +64,20 @@
   */
 
 //USB Full Speed
-//#define NUM_OF_CDC_UARTS                    2 //1-2
+#if defined (USE_OTG_FS)
+#define NUM_OF_CDC_UARTS                    2 //1-2
+#endif
 
 //USB High Speed
+#if defined (USE_OTG_HS)
 #define NUM_OF_CDC_UARTS                    3 //1-3
-
+#endif
 
 /*---------- -----------*/
 //#define USBD_MAX_NUM_INTERFACES     1U
 #define USBD_MAX_NUM_INTERFACES     ( (2 * NUM_OF_CDC_UARTS) + 0 )
 /*---------- -----------*/
-#define USBD_MAX_NUM_CONFIGURATION     4U
+#define USBD_MAX_NUM_CONFIGURATION     1U
 /*---------- -----------*/
 #define USBD_MAX_STR_DESC_SIZ     512U
 /*---------- -----------*/

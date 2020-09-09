@@ -316,7 +316,13 @@ void USB_VCP_Run(void)
 {	
 	uint16_t rxDataLength = 0;
 	uint16_t txDataLength = 0;
-	static uint8_t dataTxBuffer[CDC_DATA_HS_MAX_PACKET_SIZE];
+#if defined (USE_OTG_FS)
+  static uint8_t dataTxBuffer[CDC_DATA_FS_MAX_PACKET_SIZE];
+#endif
+#if defined (USE_OTG_HS)
+  static uint8_t dataTxBuffer[CDC_DATA_HS_MAX_PACKET_SIZE];
+#endif
+	
 
 #if (NUM_OF_CDC_UARTS > 0)
 	//Parsing of received data

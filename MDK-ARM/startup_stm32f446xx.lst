@@ -868,7 +868,7 @@ ARM Macro Assembler    Page 14
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
 interwork --depend=cansniffer\startup_stm32f446xx.d -ocansniffer\startup_stm32f
-446xx.o -I.\RTE\_CanSniffer_-_FS -I"D:\Program Files\Keil_v5.31\Packs\ARM\CMSIS
+446xx.o -I.\RTE\_CanSniffer_-_HS -I"D:\Program Files\Keil_v5.31\Packs\ARM\CMSIS
 \5.7.0\CMSIS\Core\Include" -I"D:\Program Files\Keil_v5.31\Packs\Keil\STM32F4xx_
 DFP\2.14.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include" --predefine="__MICROLIB S
 ETA 1" --predefine="__UVISION_VERSION SETA 531" --predefine="_RTE_ SETA 1" --pr

@@ -28,7 +28,7 @@
 #include "usbd_cdc_if.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "usbd_composite.h"
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN PV */
@@ -86,7 +86,7 @@ void MX_USB_DEVICE_Init(void)
   {
     Error_Handler();
   }
-  if (USBD_RegisterClass(pUsbDevice, &USBD_CDC) != USBD_OK)
+  if (USBD_RegisterClass(pUsbDevice, &USBD_Composite) != USBD_OK)
   {
     Error_Handler();
   }

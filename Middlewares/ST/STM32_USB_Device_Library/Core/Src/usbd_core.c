@@ -188,11 +188,13 @@ USBD_StatusTypeDef USBD_RegisterClass(USBD_HandleTypeDef *pdev, USBD_ClassTypeDe
   pdev->pClass = pclass;
 
   /* Get Device Configuration Descriptor */
-#ifdef USE_USB_FS
-  pdev->pConfDesc = (void *)pdev->pClass->GetFSConfigDescriptor(&len);
-#else /* USE_USB_HS */
+#if defined (USE_OTG_HS)
   pdev->pConfDesc = (void *)pdev->pClass->GetHSConfigDescriptor(&len);
-#endif /* USE_USB_FS */
+#elif defined (USE_OTG_FS)
+  pdev->pConfDesc = (void *)pdev->pClass->GetFSConfigDescriptor(&len);
+#else
+  pdev->pConfDesc = (void *)pdev->pClass->GetOtherConfigDescriptor(&len);
+#endif /* USE_USB_HS */
 
 
   return USBD_OK;
