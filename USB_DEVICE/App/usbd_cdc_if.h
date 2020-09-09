@@ -51,8 +51,19 @@
 /* USER CODE BEGIN EXPORTED_DEFINES */
 /* Define size for the receive and transmit buffer over CDC */
 /* It's up to user to redefine and/or remove those define */
-#define APP_RX_DATA_SIZE  2048
-#define APP_TX_DATA_SIZE  2048
+
+//Minimum values warning!
+#define APP_RX_DATA_1_SIZE	CDC_DATA_HS_IN_PACKET_SIZE   //minumum CDC_DATA_HS_IN_PACKET_SIZE
+#define APP_TX_DATA_1_SIZE	CDC_DATA_HS_OUT_PACKET_SIZE  //minimum CDC_DATA_HS_OUT_PACKET_SIZE
+
+#define APP_RX_DATA_2_SIZE	CDC_DATA_HS_IN_PACKET_SIZE
+#define APP_TX_DATA_2_SIZE	CDC_DATA_HS_OUT_PACKET_SIZE
+
+#define APP_RX_DATA_3_SIZE	CDC_DATA_HS_IN_PACKET_SIZE
+#define APP_TX_DATA_3_SIZE	CDC_DATA_HS_OUT_PACKET_SIZE
+
+#define APP_RX_DATA_4_SIZE	CDC_DATA_HS_IN_PACKET_SIZE
+#define APP_TX_DATA_4_SIZE	CDC_DATA_HS_OUT_PACKET_SIZE
 
 /* USER CODE END EXPORTED_DEFINES */
 
@@ -107,7 +118,7 @@ extern USBD_CDC_ItfTypeDef USBD_Interface_fops_HS;
   * @{
   */
 
-uint8_t CDC_Transmit_HS(uint8_t* Buf, uint16_t Len);
+uint8_t CDC_Transmit_HS(uint8_t* Buf, uint16_t Len, uint8_t interfaceNumber);
 
 /* USER CODE BEGIN EXPORTED_FUNCTIONS */
 

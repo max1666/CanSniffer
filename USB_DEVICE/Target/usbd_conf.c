@@ -23,6 +23,7 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
 #include "usbd_def.h"
+#include "usbd_cdc.h"
 #include "usbd_core.h"
 
 /* USER CODE BEGIN Includes */
@@ -362,9 +363,27 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
   HAL_PCD_RegisterIsoOutIncpltCallback(&hpcd_USB_OTG_HS, PCD_ISOOUTIncompleteCallback);
   HAL_PCD_RegisterIsoInIncpltCallback(&hpcd_USB_OTG_HS, PCD_ISOINIncompleteCallback);
 #endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
-  HAL_PCDEx_SetRxFiFo(&hpcd_USB_OTG_HS, 0x200);
-  HAL_PCDEx_SetTxFiFo(&hpcd_USB_OTG_HS, 0, 0x80);
-  HAL_PCDEx_SetTxFiFo(&hpcd_USB_OTG_HS, 1, 0x174);
+  //For FS:
+  //Maximum size of FIFO = 0x0140 * 4-byte word = 1280 bytes
+
+  //For HS:
+  //Maximum size of FIFO = 0x03F4 * 4-byte word = 4048 bytes
+
+  HAL_PCDEx_SetRxFiFo(&hpcd_USB_OTG_HS, 0x100);    //Rx Fifo
+  HAL_PCDEx_SetTxFiFo(&hpcd_USB_OTG_HS, 0, 0x40);  //EP 0 Fifo
+  
+#if (NUM_OF_CDC_UARTS > 0)
+  HAL_PCDEx_SetTxFiFo(&hpcd_USB_OTG_HS, CDC_EP_DATA_OUT_1, 0x80);
+#endif
+
+#if (NUM_OF_CDC_UARTS > 1)
+  HAL_PCDEx_SetTxFiFo(&hpcd_USB_OTG_HS, CDC_EP_DATA_OUT_2, 0x80);
+#endif
+
+#if (NUM_OF_CDC_UARTS > 2)
+  HAL_PCDEx_SetTxFiFo(&hpcd_USB_OTG_HS, CDC_EP_DATA_OUT_3, 0x80);
+#endif
+
   }
   return USBD_OK;
 }
@@ -599,42 +618,6 @@ USBD_StatusTypeDef USBD_LL_PrepareReceive(USBD_HandleTypeDef *pdev, uint8_t ep_a
 uint32_t USBD_LL_GetRxDataSize(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
 {
   return HAL_PCD_EP_GetRxCount((PCD_HandleTypeDef*) pdev->pData, ep_addr);
-}
-
-/**
-  * @brief  Send LPM message to user layer
-  * @param  hpcd: PCD handle
-  * @param  msg: LPM message
-  * @retval None
-  */
-void HAL_PCDEx_LPM_Callback(PCD_HandleTypeDef *hpcd, PCD_LPM_MsgTypeDef msg)
-{
-  switch (msg)
-  {
-  case PCD_LPM_L0_ACTIVE:
-    if (hpcd->Init.low_power_enable)
-    {
-      SystemClock_Config();
-
-      /* Reset SLEEPDEEP bit of Cortex System Control Register. */
-      SCB->SCR &= (uint32_t)~((uint32_t)(SCB_SCR_SLEEPDEEP_Msk | SCB_SCR_SLEEPONEXIT_Msk));
-    }
-    __HAL_PCD_UNGATE_PHYCLOCK(hpcd);
-    USBD_LL_Resume(hpcd->pData);
-    break;
-
-  case PCD_LPM_L1_ACTIVE:
-    __HAL_PCD_GATE_PHYCLOCK(hpcd);
-    USBD_LL_Suspend(hpcd->pData);
-
-    /* Enter in STOP mode. */
-    if (hpcd->Init.low_power_enable)
-    {
-      /* Set SLEEPDEEP bit and SleepOnExit of Cortex System Control Register. */
-      SCB->SCR |= (uint32_t)((uint32_t)(SCB_SCR_SLEEPDEEP_Msk | SCB_SCR_SLEEPONEXIT_Msk));
-    }
-    break;
-  }
 }
 
 /**

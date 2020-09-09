@@ -63,16 +63,24 @@
   * @{
   */
 
+//USB Full Speed
+//#define NUM_OF_CDC_UARTS                    2 //1-2
+
+//USB High Speed
+#define NUM_OF_CDC_UARTS                    3 //1-3
+
+
 /*---------- -----------*/
-#define USBD_MAX_NUM_INTERFACES     1U
+//#define USBD_MAX_NUM_INTERFACES     1U
+#define USBD_MAX_NUM_INTERFACES     ( (2 * NUM_OF_CDC_UARTS) + 0 )
 /*---------- -----------*/
-#define USBD_MAX_NUM_CONFIGURATION     1U
+#define USBD_MAX_NUM_CONFIGURATION     4U
 /*---------- -----------*/
 #define USBD_MAX_STR_DESC_SIZ     512U
 /*---------- -----------*/
 #define USBD_DEBUG_LEVEL     0U
 /*---------- -----------*/
-#define USBD_LPM_ENABLED     1U
+#define USBD_LPM_ENABLED     0U
 /*---------- -----------*/
 #define USBD_SELF_POWERED     1U
 
@@ -93,10 +101,10 @@
 /* Memory management macros */
 
 /** Alias for memory allocation. */
-#define USBD_malloc         malloc
+//#define USBD_malloc         malloc
 
 /** Alias for memory release. */
-#define USBD_free           free
+//#define USBD_free           free
 
 /** Alias for memory set. */
 #define USBD_memset         memset

@@ -445,7 +445,7 @@ static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *r
     case USBD_IDX_PRODUCT_STR:
       if (pdev->pDesc->GetProductStrDescriptor != NULL)
       {
-        pbuf = pdev->pDesc->GetProductStrDescriptor(pdev->dev_speed, &len);
+        pbuf = pdev->pDesc->GetProductStrDescriptor(pdev->dev_speed, &len, pdev->request.wLength);
       }
       else
       {

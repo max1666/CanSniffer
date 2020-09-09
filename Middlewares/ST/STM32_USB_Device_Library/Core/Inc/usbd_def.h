@@ -114,6 +114,7 @@ extern "C" {
 #define  USB_DESC_TYPE_ENDPOINT                         0x05U
 #define  USB_DESC_TYPE_DEVICE_QUALIFIER                 0x06U
 #define  USB_DESC_TYPE_OTHER_SPEED_CONFIGURATION        0x07U
+#define  USB_DESC_TYPE_INTERFACE_ASSOCIATION               11
 #define  USB_DESC_TYPE_BOS                              0x0FU
 
 #define USB_CONFIG_REMOTE_WAKEUP                        0x02U
@@ -241,7 +242,7 @@ typedef struct
   uint8_t *(*GetDeviceDescriptor)(USBD_SpeedTypeDef speed, uint16_t *length);
   uint8_t *(*GetLangIDStrDescriptor)(USBD_SpeedTypeDef speed, uint16_t *length);
   uint8_t *(*GetManufacturerStrDescriptor)(USBD_SpeedTypeDef speed, uint16_t *length);
-  uint8_t *(*GetProductStrDescriptor)(USBD_SpeedTypeDef speed, uint16_t *length);
+  uint8_t *(*GetProductStrDescriptor)(USBD_SpeedTypeDef speed, uint16_t *length, uint16_t wLength);
   uint8_t *(*GetSerialStrDescriptor)(USBD_SpeedTypeDef speed, uint16_t *length);
   uint8_t *(*GetConfigurationStrDescriptor)(USBD_SpeedTypeDef speed, uint16_t *length);
   uint8_t *(*GetInterfaceStrDescriptor)(USBD_SpeedTypeDef speed, uint16_t *length);
