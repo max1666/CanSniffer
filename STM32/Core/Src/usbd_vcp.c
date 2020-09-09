@@ -339,14 +339,17 @@ void USB_VCP_Run(void)
 	txDataLength = RoundBuffer_GetLoad(USB_CDC1_TxBuffer);
 	if(txDataLength > 0)
 	{
-		if(txDataLength > sizeof(dataTxBuffer))
-		{
-			txDataLength = sizeof(dataTxBuffer);
-		}
-		
-		txDataLength = RoundBuffer_GetArray(USB_CDC1_TxBuffer, dataTxBuffer, txDataLength);
-		
-		CDC_Transmit(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_1);
+    if(CDC_CheckTransmitAvailable(CDC_ITF_NUMBER_1))
+    {
+      if(txDataLength > sizeof(dataTxBuffer))
+      {
+        txDataLength = sizeof(dataTxBuffer);
+      }
+      
+      txDataLength = RoundBuffer_GetArray(USB_CDC1_TxBuffer, dataTxBuffer, txDataLength);
+      
+      CDC_Transmit(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_1);
+    }
 	}
 #endif
 	
@@ -365,14 +368,17 @@ void USB_VCP_Run(void)
 	txDataLength = RoundBuffer_GetLoad(USB_CDC2_TxBuffer);
 	if(txDataLength > 0)
 	{
-		if(txDataLength > sizeof(dataTxBuffer))
-		{
-			txDataLength = sizeof(dataTxBuffer);
-		}
-		
-		txDataLength = RoundBuffer_GetArray(USB_CDC2_TxBuffer, dataTxBuffer, txDataLength);
-		
-		CDC_Transmit(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_2);
+    if(CDC_CheckTransmitAvailable(CDC_ITF_NUMBER_2))
+    {
+      if(txDataLength > sizeof(dataTxBuffer))
+      {
+        txDataLength = sizeof(dataTxBuffer);
+      }
+      
+      txDataLength = RoundBuffer_GetArray(USB_CDC2_TxBuffer, dataTxBuffer, txDataLength);
+      
+      CDC_Transmit(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_2);
+    }
 	}
 #endif
 	
@@ -391,14 +397,17 @@ void USB_VCP_Run(void)
 	txDataLength = RoundBuffer_GetLoad(USB_CDC3_TxBuffer);
 	if(txDataLength > 0)
 	{
-		if(txDataLength > sizeof(dataTxBuffer))
-		{
-			txDataLength = sizeof(dataTxBuffer);
-		}
-		
-		txDataLength = RoundBuffer_GetArray(USB_CDC3_TxBuffer, dataTxBuffer, txDataLength);
-		
-		CDC_Transmit(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_3);
+    if(CDC_CheckTransmitAvailable(CDC_ITF_NUMBER_3))
+    {
+      if(txDataLength > sizeof(dataTxBuffer))
+      {
+        txDataLength = sizeof(dataTxBuffer);
+      }
+      
+      txDataLength = RoundBuffer_GetArray(USB_CDC3_TxBuffer, dataTxBuffer, txDataLength);
+      
+      CDC_Transmit(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_3);
+    }
 	}
 #endif
 	
@@ -417,14 +426,17 @@ void USB_VCP_Run(void)
 	txDataLength = RoundBuffer_GetLoad(USB_CDC4_TxBuffer);
 	if(txDataLength > 0)
 	{
-		if(txDataLength > sizeof(dataTxBuffer))
-		{
-			txDataLength = sizeof(dataTxBuffer);
-		}
-		
-		txDataLength = RoundBuffer_GetArray(USB_CDC4_TxBuffer, dataTxBuffer, txDataLength);
-		
-		CDC_Transmit(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_4);
+    if(CDC_CheckTransmitAvailable(CDC_ITF_NUMBER_4))
+    {
+      if(txDataLength > sizeof(dataTxBuffer))
+      {
+        txDataLength = sizeof(dataTxBuffer);
+      }
+      
+      txDataLength = RoundBuffer_GetArray(USB_CDC4_TxBuffer, dataTxBuffer, txDataLength);
+      
+      CDC_Transmit(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_4);
+    }
 	}
 #endif
 }

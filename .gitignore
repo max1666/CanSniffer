@@ -1,5 +1,5 @@
-MDK-ARM/CanSniffer/
-MDK-ARM/DebugConfig/
-MDK-ARM/CanSniffer.uvguix*
-MDK-ARM/RTE/_CanSniffer/RTE_Components.h
-MDK-ARM/RTE/
+STM32/MDK-ARM/CanSniffer/
+STM32/MDK-ARM/DebugConfig/
+STM32/MDK-ARM/CanSniffer.uvguix*
+STM32/MDK-ARM/RTE/_CanSniffer/RTE_Components.h
+STM32/MDK-ARM/RTE/

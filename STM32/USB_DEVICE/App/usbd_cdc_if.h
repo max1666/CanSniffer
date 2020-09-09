@@ -29,7 +29,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_cdc.h"
-
+#include <stdbool.h>
 /* USER CODE BEGIN INCLUDE */
 
 /* USER CODE END INCLUDE */
@@ -117,7 +117,7 @@ extern USBD_CDC_ItfTypeDef USBD_Interface_fops;
   * @brief Public functions declaration.
   * @{
   */
-
+bool CDC_CheckTransmitAvailable(uint8_t interfaceNumber);
 uint8_t CDC_Transmit(uint8_t* Buf, uint16_t Len, uint8_t interfaceNumber);
 
 /* USER CODE BEGIN EXPORTED_FUNCTIONS */

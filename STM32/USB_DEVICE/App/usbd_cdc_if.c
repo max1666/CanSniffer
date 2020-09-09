@@ -388,6 +388,17 @@ static int8_t CDC_Receive(uint8_t* Buf, uint32_t *Len, uint8_t interfaceNumber)
   /* USER CODE END 11 */
 }
 
+bool CDC_CheckTransmitAvailable(uint8_t interfaceNumber)
+{
+  if(USBD_CDC_CheckSendingAvailable(pUsbDevice, interfaceNumber) == USBD_OK)
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
 /**
   * @brief  Data to send over USB IN endpoint are sent over CDC interface
   *         through this function.
