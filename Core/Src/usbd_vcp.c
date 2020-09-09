@@ -340,7 +340,7 @@ void USB_VCP_Run(void)
 		
 		txDataLength = RoundBuffer_GetArray(USB_CDC1_TxBuffer, dataTxBuffer, txDataLength);
 		
-		CDC_Transmit_HS(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_1);
+		CDC_Transmit(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_1);
 	}
 #endif
 	
@@ -366,7 +366,7 @@ void USB_VCP_Run(void)
 		
 		txDataLength = RoundBuffer_GetArray(USB_CDC2_TxBuffer, dataTxBuffer, txDataLength);
 		
-		CDC_Transmit_HS(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_2);
+		CDC_Transmit(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_2);
 	}
 #endif
 	
@@ -392,7 +392,7 @@ void USB_VCP_Run(void)
 		
 		txDataLength = RoundBuffer_GetArray(USB_CDC3_TxBuffer, dataTxBuffer, txDataLength);
 		
-		CDC_Transmit_HS(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_3);
+		CDC_Transmit(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_3);
 	}
 #endif
 	
@@ -418,7 +418,7 @@ void USB_VCP_Run(void)
 		
 		txDataLength = RoundBuffer_GetArray(USB_CDC4_TxBuffer, dataTxBuffer, txDataLength);
 		
-		CDC_Transmit_HS(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_4);
+		CDC_Transmit(dataTxBuffer, txDataLength, CDC_ITF_NUMBER_4);
 	}
 #endif
 }

@@ -103,7 +103,7 @@
   */
 
 /** CDC Interface callback. */
-extern USBD_CDC_ItfTypeDef USBD_Interface_fops_HS;
+extern USBD_CDC_ItfTypeDef USBD_Interface_fops;
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
 
@@ -118,7 +118,7 @@ extern USBD_CDC_ItfTypeDef USBD_Interface_fops_HS;
   * @{
   */
 
-uint8_t CDC_Transmit_HS(uint8_t* Buf, uint16_t Len, uint8_t interfaceNumber);
+uint8_t CDC_Transmit(uint8_t* Buf, uint16_t Len, uint8_t interfaceNumber);
 
 /* USER CODE BEGIN EXPORTED_FUNCTIONS */
 

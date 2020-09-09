@@ -86,8 +86,13 @@
 
 /****************************************/
 /* #define for FS and HS identification */
+#if defined (USE_OTG_FS)
 #define DEVICE_FS 		0
+#endif
+
+#if defined (USE_OTG_HS)
 #define DEVICE_HS 		1
+#endif
 
 /**
   * @}

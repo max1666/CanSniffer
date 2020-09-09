@@ -56,7 +56,16 @@ void SVC_Handler(void);
 void DebugMon_Handler(void);
 void PendSV_Handler(void);
 void SysTick_Handler(void);
+
+#if defined (USE_OTG_HS)
 void OTG_HS_IRQHandler(void);
+#endif
+
+#if defined (USE_OTG_FS)
+void OTG_FS_IRQHandler(void);
+#endif
+
+
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
